@@ -10,6 +10,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "interactjs": "^1.10.17",
     "moment": "^2.29.4",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",

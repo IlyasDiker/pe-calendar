@@ -1,5 +1,6 @@
 <template>
-    <div class="bg-white shadow-sm overflow-hidden rounded flex flex-col h-[var(--event-height)] w-full border card-size border-blue-500"
+    <div class="bg-white shadow-sm overflow-hidden rounded flex flex-col h-[var(--event-height)] w-full border card-size border-blue-500" draggable="true"
+        @dragstart="dragStart"
         :style="getStyles()">
         <span class="h-2 bg-blue-500"></span>
         <div class="p-2">
@@ -9,15 +10,22 @@
 </template>
 
 <script>
+import moment from 'moment';
+import interact from 'interactjs'
+
 export default{
     methods:{
         getStyles(){
-            console.log('%cEventCard.vue line:15 this.event', 'color: #007acc;', this.event);
-            let hour = this.event.startDateTime.hour();
-            let duration = this.event.endDateTime.hour() - this.event.startDateTime.hour()
-            console.log('%cEventCard.vue line:16 hour', 'color: #007acc;', hour);
-            return `--time-start-hour:${hour}; --time-duration-hour:${duration}`
-        }
+            let hourStart = +moment.duration(this.event.startDateTime.diff(this.event.startDateTime.clone().startOf('day'))).asMinutes();
+            let duration = moment.duration(this.event.endDateTime.diff(this.event.startDateTime)).asMinutes()
+            return `--time-start-hour:${hourStart/60}; --time-duration-hour:${duration/60}`
+        },
+        allowDrop(event) {
+            event.preventDefault();
+        },
+        dragStart(e) {
+            e.dataTransfer.setData("event", this.event);
+        },
     },
     props:{
         event: Object

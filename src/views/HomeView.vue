@@ -6,7 +6,7 @@ import {ref} from "vue"
 const myEvents = ref([
   {
     startDateTime: moment(), 
-    endDateTime: moment().add(1, 'hour'),
+    endDateTime: moment().add(1, 'hour').add(30, 'minute'),
     title:"Weekly Followup"
   }
 ])
