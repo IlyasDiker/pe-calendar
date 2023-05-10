@@ -4,7 +4,12 @@
             <div>
 
             </div>
-            <div>
+            <div class="flex flex-row gap-3 items-center">
+                <select v-model="hourBlockHeight" id="countries"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="40">1 Hour</option>
+                    <option value="80">30 Min</option>
+                </select>
                 <select v-model="selectedView" id="countries"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="day">Day</option>
@@ -14,7 +19,7 @@
             </div>
         </div>
 
-        <div class="flex-grow flex flex-col overflow-auto relative pl-10" style="--hour-block-height:40px">
+        <div class="flex-grow flex flex-col overflow-auto relative pl-10" :style="`--hour-block-height:${hourBlockHeight}px`">
             
             <nav class="flex flex-row w-full sticky top-0 bg-white/80 backdrop-blur z-20" :style="`--days-count:${ getViewDays().length };`">
                 <template v-for="(item, index) in getViewDays()" :key="index">
@@ -29,7 +34,7 @@
                 'grid-view': selectedView == 'month'
             }" :style="`--days-count:${ getViewDays().length };`">
                 <template v-for="(item, index) in getViewDays()" :key="index">
-                    <div class="flex flex-col flex-shrink-0 border-l last:border-r h-[calc(var(--hour-block-height)*24)] w-[calc(100%/var(--days-count))] relative">
+                    <div class="flex flex-col flex-shrink-0 border-l last:border-r h-[calc(var(--hour-block-height)*24)] w-[calc(100%/var(--days-count))] transition-all relative">
                         
                         <template v-if="events && events.length > 0">
                             <template v-for="(item, index) in getEventsForDay(item)" :key="index">
@@ -42,7 +47,7 @@
 
                 <template v-if="['day', 'week'].includes(selectedView)">
                     <template v-for="(item) in 24" :key="item">
-                        <div class="absolute top-[calc(var(--hour-span)*var(--hour-block-height))] -left-10 right-0 border-b h-0 -z-10 text-gray-400" :style="`--hour-span:${item}`">
+                        <div class="absolute top-[calc(var(--hour-span)*var(--hour-block-height))] transition-all -left-10 right-0 border-b h-0 -z-10 text-gray-400" :style="`--hour-span:${item}`">
                             <div class="relative">
                                 <span class="absolute -translate-y-1/2 px-2 bg-gradient-to-r from-white to-white/50 w-10">{{ item }}</span>
                             </div>
@@ -66,6 +71,7 @@ export default {
     data() {
         return {
             selectedView: 'week',
+            hourBlockHeight: 40,
             today: moment()
         }
     },
